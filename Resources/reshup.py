@@ -2,7 +2,7 @@ import datetime
 from flask_restful import Resource, reqparse, fields, marshal_with
 from common.model import cart, items, Users, Blacklist_Token
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import jwt_required, current_user, create_access_token, create_refresh_token, get_jwt_identity,  get_jwt, verify_jwt_in_request, get_current_user
+from flask_jwt_extended import jwt_required, current_user, create_access_token, create_refresh_token, get_jwt_identity,  get_jwt, verify_jwt_in_request
 from functools import wraps
 from flask import jsonify
 
@@ -18,7 +18,7 @@ parser.add_argument("category", type=str, required=True, help="This field can't 
 parser.add_argument("sub_category", type=str, required=True, help="This field can't be left Blank")
 parser.add_argument("price", type=int, required=True, help="This field can't be left Blank")
 parser.add_argument("description", type=str, required=True, help="This field can't be left Blank")
-# you can use the location arguments to change where the parser will look for arguments
+
 cart_parser = reqparse.RequestParser()
 cart_parser.add_argument("item_id", type=int, required=True, help="this field must be specified")
 cart_parser.add_argument("cart_id", type=int, help="this field must be specified")
@@ -51,11 +51,11 @@ class Items(Resource):
 
     @jwt_required(optional=True)
     def patch(self):
-        req_data = parser.parse_args()  # this data is a dictionary
-        update_id = req_data.get("item_id")  # fetch the data in id(because all items have uniques ID) from user input
-        update_data = items.find_item(update_id)  # now you either have the item you want to query or you get a 404 error  THIS NEEDS TO BE LOOKED AT
+        req_data = parser.parse_args()
+        update_id = req_data.get("item_id")
+        update_data = items.find_item(update_id)
         for key, value in req_data.items():
-            setattr(update_data, key, value)  # fetches an attribute and changes the value
+            setattr(update_data, key, value)
             items.updating_item()
         return {"message": "item successfully Updated"}, 201
 
@@ -63,7 +63,7 @@ class Items(Resource):
     @jwt_required(optional=True)
     def delete(self):
         req_data = parser.parse_args()
-        delete_id = req_data.get("item_id")  # fetch the data in id from user input
+        delete_id = req_data.get("item_id")
         delete_data = items.find_item(delete_id)
         items.delete_order(delete_data)
         return {"message": "item successfully deleted"}, 204
@@ -108,7 +108,7 @@ class Carts(Resource):
 class Login_Users(Resource):
     def post(self):
         data = user_parser.parse_args()
-        data_username = Users.find_user(data.get("username"))  # find a way to Query the database better
+        data_username = Users.find_user(data.get("username"))
         if not data_username:  # this returns the object of the class with the username, you can now query this object for the different attributes
             return {"error": "Invalid Username or Password!"}, 401
         if not check_password_hash(data_username.password, data.get("password")):

@@ -83,6 +83,8 @@ celerybeat-schedule
 # dotenv
 .env
 
+.gitignore
+
 # virtualenv
 .venv
 venv/
