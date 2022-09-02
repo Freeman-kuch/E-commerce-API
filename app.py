@@ -19,7 +19,7 @@ api = Api(app)
 def tables():
     db.create_all()
 
-@jwt.token_in_blocklist_loader  # the error
+@jwt.token_in_blocklist_loader  
 def check_if_token_revoked(jwt_header, jwt_payload: dict) -> bool:
     jti = jwt_payload["jti"]
     token = Blacklist_Token.find_token(jti)
@@ -27,16 +27,16 @@ def check_if_token_revoked(jwt_header, jwt_payload: dict) -> bool:
 
 
 
-api.add_resource(home, "/home", "/")  # all set
-api.add_resource(category, "/category/<string:section>")  # all set
-api.add_resource(item, "/item/<string:item>")  # all set
-api.add_resource(Admins_Only, "/users")  #
-api.add_resource(Carts, "/cart")  # all set
-api.add_resource(Items, "/items")  # all set
-api.add_resource(Login_Users, "/login/")  # all set
-api.add_resource(New_User, "/signup/")  # all set
+api.add_resource(home, "/home", "/")
+api.add_resource(category, "/category/<string:section>")
+api.add_resource(item, "/item/<string:item>") 
+api.add_resource(Admins_Only, "/users")  
+api.add_resource(Carts, "/cart")
+api.add_resource(Items, "/items") 
+api.add_resource(Login_Users, "/login/")
+api.add_resource(New_User, "/signup/") 
 api.add_resource(token_renewal, "/refresh")
-api.add_resource(Logout, "/logout")  # all set
+api.add_resource(Logout, "/logout") 
 
 
 if __name__ == "__main__":
